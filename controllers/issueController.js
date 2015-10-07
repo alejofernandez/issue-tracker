@@ -5,7 +5,9 @@ var issueController = {
   getCollection: getCollection,
   get:           get,
   post:          post,
-  patch:         patch
+  put:           put,
+  patch:         patch,
+  del:           del
 };
 
 function getCollection() {
@@ -22,6 +24,14 @@ function post(req) {
 
 function patch(req) {
   return issueService.update(_.extend(req.body, {id: +req.params.issueId}));
+}
+
+function put(req) {
+  return issueService.update(_.extend(issueService.getEmptyIssue(), req.body, {id: +req.params.issueId}));
+}
+
+function del(req) {
+  issueService.remove(+req.params.issueId);
 }
 
 module.exports = issueController;

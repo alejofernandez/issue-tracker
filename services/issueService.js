@@ -11,16 +11,20 @@ var defaultIssue    = {
 };
 
 var issueService    = {
-  find:    find,
-  findAll: findAll,
-  add:     add,
-  update:  update
+  getEmptyIssue: getEmptyIssue,
+  find:          find,
+  findAll:       findAll,
+  add:           add,
+  update:        update,
+  remove:        remove
 };
 
+function getEmptyIssue() {
+  return _.extend({}, defaultIssue);
+}
+
 function find(id) {
-  return issues.filter(function (issue) {
-    return issue.id === id;
-  })[0] || {};
+  return _.find(issues, {id: id}) || {};
 }
 
 function findAll() {
@@ -29,7 +33,7 @@ function findAll() {
 
 function add(issue) {
   issue.id = (issues.length ? issues[issues.length -1].id + 1 : 1);
-  issue = _.extend(defaultIssue, issue);
+  issue = _.extend(getEmptyIssue(), issue);
 
   issues.push(issue);
 
@@ -40,6 +44,10 @@ function update(changes) {
   var issue = find(changes.id);
 
   return _.extend(issue, changes);
+}
+
+function remove(id) {
+  _.remove(issues, {id: id});
 }
 
 module.exports = issueService;
